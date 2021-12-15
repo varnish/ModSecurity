@@ -128,7 +128,9 @@ bool GeoLookup::lookup(const std::string& target, Transaction *trans,
         int gai_error, mmdb_error;
         MMDB_lookup_result_s r;
 
-        r = MMDB_lookup_string(&mmdb, target.c_str(), &gai_error, &mmdb_error);
+		/* The lookup function is const, which transforms the DB to a const
+		   pointer, and prevents a no-permissive build. */
+        r = MMDB_lookup_string((MMDB_s*)&mmdb, target.c_str(), &gai_error, &mmdb_error);
 
         if (gai_error) {
             if (debug) {
@@ -304,4 +306,3 @@ bool GeoLookup::lookup(const std::string& target, Transaction *trans,
 
 }  // namespace Utils
 }  // namespace modsecurity
-
